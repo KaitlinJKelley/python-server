@@ -47,3 +47,7 @@ def create_employee(employee):
 
     return employee
 
+def delete_employee(id):
+  for index, employee in enumerate(EMPLOYEES):
+    if employee["id"] == id:
+      EMPLOYEES.pop(index)
