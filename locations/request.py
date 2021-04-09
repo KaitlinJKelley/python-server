@@ -37,3 +37,8 @@ def create_location(location):
     LOCATIONS.append(location)
 
     return location
+
+def delete_location(id):
+    for index, location in enumerate(LOCATIONS):
+        if location["id"] == id:
+            LOCATIONS.pop(index)
