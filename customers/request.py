@@ -22,11 +22,6 @@ CUSTOMERS = [
       "name": "Kaitlin Kelley",
       "address": "7002 Chestnut Ct",
       "email": "kaitlin@gmail.com"
-    },
-    {
-      "email": "first@gmail.com",
-      "name": "first last",
-      "id": 5
     }
   ]
 
@@ -40,3 +35,19 @@ def get_single_customer(id):
         if customer["id"] == id:
             requested_customer = customer
             return requested_customer
+
+def create_customer(customer):
+    # Get the id value of the last animal in the list
+    max_id = CUSTOMERS[-1]["id"]
+
+    # Add 1 to whatever that number is
+    new_id = max_id + 1
+
+    # Add an `id` property to the animal dictionary
+    customer["id"] = new_id
+
+    # Add the animal dictionary to the list
+    CUSTOMERS.append(customer)
+
+    # Return the dictionary with `id` property added
+    return customer
