@@ -29,17 +29,25 @@ def get_all_locations():
 
 # Function with a single parameter
 def get_single_location(id):
-    # Variable to hold the found animal, if it exists
-    requested_location = None
+    with sqlite3.connect("kennel.db") as conn:
 
-    # Iterate the ANIMALS list above. Very similar to the
-    # for..of loops you used in JavaScript.
-    for location in LOCATIONS:
-        # Dictionaries in Python use [] notation to find a key
-        # instead of the dot notation that JavaScript used.
-        if location["id"] == id:
-            requested_location = location
-            return requested_location
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        db_cursor.execute(""" 
+        SELECT
+            l.id,
+            l.name,
+            l.address
+        FROM location l
+        WHERE l.id = ?
+        """, (id,))
+
+        data = db_cursor.fetchone()
+
+        location = Location(data["id"], data["name"], data["address"])
+
+        return json.dumps(location.__dict__)
 
 def create_location(location):
     max_id = LOCATIONS[-1]["id"]
