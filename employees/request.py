@@ -1,41 +1,55 @@
-EMPLOYEES = [
-    {
-      "id": 1,
-      "name": "Jeremy Bakker",
-      "locationId": 2
-    },
-    {
-      "id": 2,
-      "name": "Kendal Crabtree",
-      "locationId": 2
-    },
-    {
-      "id": 3,
-      "name": "Luke Darden",
-      "locationId": 1
-    },
-    {
-      "id": 4,
-      "name": "Mitch Eglin",
-      "locationId": 1
-    },
-    {
-      "name": "Lucy",
-      "locationId": 2,
-      "id": 5
-    }
-  ]
+import sqlite3
+import json
+from models import Employee
 
 def get_all_employees():
-    return EMPLOYEES
+    with sqlite3.connect("./kennel.db") as conn:
+
+      conn.row_factory = sqlite3.Row
+      db_cursor = conn.cursor()
+
+      db_cursor.execute("""
+      SELECT
+          e.id,
+          e.name,
+          e.address,
+          e.location_id
+      FROM employee e
+      """)
+
+      employees = []
+
+      dataset = db_cursor.fetchall()
+
+      for row in dataset:
+        # new variable
+        employee = Employee(row["id"], row["name"], row["address"], row["location_id"])
+
+        employees.append(employee.__dict__)
+
+      return json.dumps(employees)
 
 def get_single_employee(id):
-    requested_employee = None
+    with sqlite3.connect("./kennel.db") as conn:
 
-    for employee in EMPLOYEES:
-        if employee["id"] == id:
-            requested_employee = employee
-            return requested_employee
+      conn.row_factory = sqlite3.Row
+      db_cursor = conn.cursor()
+
+      db_cursor.execute("""
+      SELECT
+          e.id,
+          e.name,
+          e.address,
+          e.location_id
+      FROM employee e
+      WHERE e.id = ?
+      """, (id,))
+
+      data = db_cursor.fetchone()
+
+      employee = Employee(data["id"], data["name"], data["address"], data["location_id"])
+
+      return json.dumps(employee.__dict__)
 
 def create_employee(employee):
     max_id = EMPLOYEES[-1]["id"]
