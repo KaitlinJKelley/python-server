@@ -73,24 +73,24 @@ class HandleRequests(BaseHTTPRequestHandler):
 
             if resource == "animals":
                 if id is not None:
-                    response = f"{get_single_animal(id)}"
+                    response = get_single_animal(id)
                 else:
-                    response = f"{get_all_animals()}"
+                    response = get_all_animals()
             elif resource == "customers":
                 if id is not None:
-                    response = f"{get_single_customer(id)}"
+                    response = get_single_customer(id)
                 else:
-                    response = f"{get_all_customers()}"
+                    response = get_all_customers()
             elif resource == "locations":
                 if id is not None:
-                    response = f"{get_single_location(id)}"
+                    response = get_single_location(id)
                 else:
-                    response = f"{get_all_locations()}"
+                    response = get_all_locations()
             elif resource == "employees":
                 if id is not None:
-                    response = f"{get_single_employee(id)}"
+                    response = get_single_employee(id)
                 else:
-                    response = f"{get_all_employees()}"
+                    response = get_all_employees()
 
         # Response from parse_url() is a tuple with 3
         # items in it, which means the request was for
@@ -102,14 +102,14 @@ class HandleRequests(BaseHTTPRequestHandler):
             # query parameter that specified the customer
             # email as a filtering value?
             if key == "email" and resource == "customers":
-                response = get_customers_by_email(value)
+                response = f"{get_customers_by_email(value)}"
             if key == "location_id":
                 if resource == "animals":
-                    response = get_animals_by_location(value)
+                    response = f"{get_animals_by_location(value)}"
                 elif resource == "employees":
-                    response = get_employees_by_location(value)
+                    response = f"{get_employees_by_location(value)}"
             if key == "status" and resource == "animals":
-                response = get_animals_by_status(value)
+                response = f"{get_animals_by_status(value)}"
 
         self.wfile.write(response.encode())
 
