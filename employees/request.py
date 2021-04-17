@@ -94,6 +94,22 @@ def delete_employee(id):
       EMPLOYEES.pop(index)
 
 def update_employee(id, new_employee):
-  for index, employee in enumerate(EMPLOYEES):
-    if employee["id"] == id:
-      EMPLOYEES[index] = new_employee
+  with sqlite3.connect("./kennel.db") as conn:
+
+    db_cursor = conn.cursor()
+
+    db_cursor.execute(""" 
+    UPDATE Employee
+    SET
+      name = ?,
+      address = ?,
+      location_id = ?
+    WHERE id = ?
+    """, (new_employee["name"], new_employee["address"], new_employee["locationId"], id,))
+
+    rows_effected = db_cursor.rowcount
+
+    if rows_effected == 0:
+      return False
+    else:
+      return True
