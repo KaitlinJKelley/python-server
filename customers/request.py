@@ -129,6 +129,23 @@ def delete_customer(id):
     #     CUSTOMERS.pop(customer_index)
 
 def update_customer(id, new_customer):
-  for index, customer in enumerate(CUSTOMERS):
-    if customer["id"] == id:
-      CUSTOMERS[index] = new_customer
+  with sqlite3.connect("./kennel.db") as conn:
+
+      db_cursor = conn.cursor()
+
+      db_cursor.execute(""" 
+      UPDATE Customer
+      SET
+        name = ?,
+        address = ?,
+        email = ?,
+        password = ?
+      WHERE id = ?
+      """, (new_customer["name"],new_customer["address"], new_customer["email"], new_customer["password"],id,))
+
+      rows_effected = db_cursor.rowcount
+
+      if rows_effected == 0:
+        return False
+      else:
+        return True
