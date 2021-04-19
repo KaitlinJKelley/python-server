@@ -113,20 +113,14 @@ def create_customer(customer):
     return customer
 
 def delete_customer(id):
-    # Initial -1 value for animal index, in case one isn't found
-    # customer_index = -1
+    with sqlite3.connect("./kennel.db") as conn:
 
-    # Iterate the ANIMALS list, but use enumerate() so that you
-    # can access the index value of each item
-    for index, customer in enumerate(CUSTOMERS):
-        if customer["id"] == id:
-            # Found the animal. Store the current index.
-            # customer_index = index
-            CUSTOMERS.pop(index)
+        db_cursor = conn.cursor()
 
-    # If the animal was found, use pop(int) to remove it from list
-    # if customer_index >= 0:
-    #     CUSTOMERS.pop(customer_index)
+        db_cursor.execute(""" 
+        DELETE FROM Customer
+        WHERE id = ?
+        """, (id,))
 
 def update_customer(id, new_customer):
   with sqlite3.connect("./kennel.db") as conn:

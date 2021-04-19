@@ -107,9 +107,14 @@ def create_employee(new_employee):
         return True
 
 def delete_employee(id):
-  for index, employee in enumerate(EMPLOYEES):
-    if employee["id"] == id:
-      EMPLOYEES.pop(index)
+  with sqlite3.connect("./kennel.db") as conn:
+
+    db_cursor = conn.cursor()
+
+    db_cursor.execute(""" 
+    DELETE FROM Employee
+    WHERE id = ?
+    """, (id,))
 
 def update_employee(id, new_employee):
   with sqlite3.connect("./kennel.db") as conn:
