@@ -87,15 +87,24 @@ def get_employees_by_location(location_id):
 
     return json.dumps(employees)
 
-def create_employee(employee):
-    max_id = EMPLOYEES[-1]["id"]
-    new_id = max_id + 1
+def create_employee(new_employee):
+    with sqlite3.connect("kennel.db") as conn:
 
-    employee["id"] = new_id
+      db_cursor = conn.cursor()
 
-    EMPLOYEES.append(employee)
+      db_cursor.execute(""" 
+      INSERT INTO Employee
+        (name, address, location_id)
+      VALUES 
+        (?,?,?)
+      """, (new_employee["name"], new_employee["address"], new_employee["locationId"]))
 
-    return employee
+      rows_effected = db_cursor.rowcount
+
+      if rows_effected == 0:
+        return False
+      else:
+        return True
 
 def delete_employee(id):
   for index, employee in enumerate(EMPLOYEES):
